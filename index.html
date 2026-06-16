@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Agility | Product Design & Engineering Portfolio</title>
+  <style>
+    /* Global Clean Variable Architecture */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-main: #1d1d1f;
+      --text-muted: #6e6e73;
+      --accent: #2997ff;
+      --border: #d2d2d7;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation Layout */
+    nav {
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+
+    /* Hero / Header Structure */
+    header {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 90px 22px 60px 22px;
+      text-align: left;
+    }
+    header h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    header p {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Target Showcase Display Wrap */
+    .showcase-section {
+      background-color: var(--bg-secondary);
+      padding: 60px 22px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 30px;
+    }
+
+    /* --- THE EXCLUSIVE IFRAME WORDLE CANVAS WRAPPER --- */
+    .game-wrapper {
+      background: #121213; /* Matches internal Wordle body matrix */
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+      border: 1px solid #3a3a3c;
+    }
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      padding-top: 135%; /* Maintains perfect operational canvas vertical ratio aspect scaling */
+    }
+    .iframe-container iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Portfolio Overview Content Layout Grid */
+    .project-meta {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .project-meta h3 { font-size: 1.5rem; margin-bottom: 10px; }
+    .project-meta p { color: var(--text-muted); margin-bottom: 20px; font-size: 1rem; text-align: left; }
+    .tag {
+      display: inline-block;
+      background: #e8e8ed;
+      color: #1d1d1f;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* Footer Framework Elements */
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 22px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-container">
+      <a href="#" class="brand">UX AGILITY</a>
+      <div class="nav-links">
+        <a href="#work">Featured Case Study</a>
+        <a href="#about">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Hi, I'm a Product Architect.</h1>
+    <p>Designing seamless human interfaces and cloud integrations at the intersection of clarity and agility.</p>
+  </header>
+
+  <section class="showcase-section" id="work">
+    <div class="container">
+      <h2 class="section-title">Featured Interactive Build</h2>
+      
+      <div class="game-wrapper">
+        <div class="iframe-container">
+          <iframe src="https://script.google.com/macros/s/AKfycbzOnol3vSX9hWvTapvBfWnV8obFpyclEUs6PhAl8UGaaRGtTHSrtyVRLn0Hcn5qRCFfLQ/exec"></iframe>
+        </div>
+      </div>
+
+      <div class="project-meta">
+        <h3>Serverless Wordle Simulator Matrix</h3>
+        <div>
+          <span class="tag">Decoupled Architecture</span>
+          <span class="tag">Google Apps Script API</span>
+          <span class="tag">Asynchronous UX Locking</span>
+          <span class="tag">Cloud Spreadsheet DB</span>
+        </div>
+        <p>
+          This fully decoupled application transitions a complex logical processing loop out of a standard spreadsheet environment into a responsive consumer-facing presentation layer. 
+        </p>
+        <p>
+          By establishing asynchronous microservices through Apps Script APIs, inputs are evaluated using a strict two-pass matrix loop on the server side, utilizing Google Sheets entirely as an encrypted, scalable back-end cloud database and CMS manager.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer id="about">
+    <p>Interested in robust architectures or intuitive product workflows?</p>
+    <p>Let's collaborate: <a href="mailto:yourname@uxagility.com">connect@uxagility.com</a></p>
+    <p style="margin-top: 40px; font-size: 0.75rem; color:#bebeed;">&copy; 2026 UX Agility. Engineered for modern high-performance frameworks.</p>
+  </footer>
+
+</body>
+</html>
