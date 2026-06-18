@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Google My Maps — Stephen Wheeler</title>
+  <title>SBB API Web App — Stephen Wheeler</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,8 +68,8 @@
 
     .page-intro p + p { margin-top: 0.85rem; }
 
-    /* ── MAP EMBED ── */
-    .map-wrapper {
+    /* ── EMBED ── */
+    .wrapper {
       width: 100%;
       border-radius: 8px;
       overflow: hidden;
@@ -78,14 +78,14 @@
       margin-bottom: 1.25rem;
     }
 
-    .map-wrapper iframe {
+    .wrapper iframe {
       display: block;
       width: 100%;
       height: 560px;
       border: none;
     }
 
-    .map-caption {
+    .caption {
       font-size: 0.82rem;
       color: var(--ink-light);
       margin-bottom: 3.5rem;
@@ -132,7 +132,7 @@
     .back-link:hover { text-decoration: underline; }
 
     @media (max-width: 680px) {
-      .map-wrapper iframe { height: 420px; }
+      .wrapper iframe { height: 420px; }
     }
   </style>
 </head>
@@ -143,7 +143,7 @@
   <div class="page-content">
 
     <p class="page-eyebrow">SBB demo · API · Development</p>
-    <h1>Google My Maps</h1>
+    <h1>SBB API Web App</h1>
 
     <div class="page-intro">
       <p>
@@ -154,15 +154,15 @@
       </p>
     </div>
 
-    <div class="map-wrapper">
+    <div class="wrapper">
       <iframe
-        src="https://www.google.com/maps/d/embed?mid=1ddbdKNbJ2bDaqnJV8gnv7bkx3lWP4Wpi&ehbc=2E312F"
+        src="sbb-live-departures.html"
         width="640"
         height="480"
-        title="Pharmacies in Zürich — a Google My Maps example">
+        title="SBB Departures — a web app example">
       </iframe>
     </div>
-    <p class="map-caption">SBB Departures · Created with the SBB API and Claude</p>
+    <p class="caption">SBB Departures · App development against the SBB API</p>
 
     <hr />
 
