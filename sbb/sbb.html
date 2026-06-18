@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google My Maps — Stephen Wheeler</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/portfolio/nav.css" />
+
+  <style>
+    :root {
+      --bg:        #F7F6F2;
+      --ink:       #1A1A1A;
+      --ink-mid:   #555550;
+      --ink-light: #888882;
+      --accent:    #2D7D6F;
+      --accent-bg: #EAF3F1;
+      --rule:      #DDDDD8;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE CONTENT ── */
+    .page-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem clamp(1.5rem, 8vw, 10rem);
+    }
+
+    .page-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .page-intro {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .page-intro p + p { margin-top: 0.85rem; }
+
+    /* ── MAP EMBED ── */
+    .map-wrapper {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      margin-bottom: 1.25rem;
+    }
+
+    .map-wrapper iframe {
+      display: block;
+      width: 100%;
+      height: 560px;
+      border: none;
+    }
+
+    .map-caption {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── DIVIDER ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 3rem 0;
+    }
+
+    /* ── ABOUT THE PROJECT ── */
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .body-text {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      max-width: 680px;
+      line-height: 1.75;
+    }
+
+    .body-text p + p { margin-top: 1rem; }
+    .body-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 3rem;
+    }
+
+    .back-link::before { content: '←'; }
+    .back-link:hover { text-decoration: underline; }
+
+    @media (max-width: 680px) {
+      .map-wrapper iframe { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-nav"></div>
+
+  <div class="page-content">
+
+    <p class="page-eyebrow">SBB demo · API · Development</p>
+    <h1>Google My Maps</h1>
+
+    <div class="page-intro">
+      <p>
+        A friend was describing a simple web app he wanted that would show him the next trains departing from his home station to the station nearest his work, so that he could see at a glance which were the next departures, and which were delayed or cancelled. At the end of the day, he would reverse the origin and destination stations for the same information.<br /><br />
+        I decided to find out whether an API existed for the Swiss Federal Railways (SBB), and if so, whether I could use it to build the app. Via prompts with Claude, I built that app for my friend in a day, and he uses it every day!<br /><br />
+        <br /><br />
+        This demonstrates my ability to think creativiely to solve a real-world problem, even if loosely described, with little prior knowledge of the technical domain, but an inkling that a solution must be possible via existing tools.
+      </p>
+    </div>
+
+    <div class="map-wrapper">
+      <iframe
+        src="https://www.google.com/maps/d/embed?mid=1ddbdKNbJ2bDaqnJV8gnv7bkx3lWP4Wpi&ehbc=2E312F"
+        width="640"
+        height="480"
+        title="Pharmacies in Zürich — a Google My Maps example">
+      </iframe>
+    </div>
+    <p class="map-caption">SBB Departures · Created with the SBB API and Claude</p>
+
+    <hr />
+
+    <a class="back-link" href="/portfolio/#work">Back to portfolio</a>
+
+  </div>
+
+  <script>
+    fetch('/portfolio/nav.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('site-nav').innerHTML = html);
+  </script>
+
+</body>
+</html>
