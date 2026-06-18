@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google My Maps — Stephen Wheeler</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/portfolio/nav.css" />
+
+  <style>
+    :root {
+      --bg:        #F7F6F2;
+      --ink:       #1A1A1A;
+      --ink-mid:   #555550;
+      --ink-light: #888882;
+      --accent:    #2D7D6F;
+      --accent-bg: #EAF3F1;
+      --rule:      #DDDDD8;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE CONTENT ── */
+    .page-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem clamp(1.5rem, 8vw, 10rem);
+    }
+
+    .page-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .page-intro {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .page-intro p + p { margin-top: 0.85rem; }
+
+    /* ── MAP EMBED ── */
+    .map-wrapper {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      margin-bottom: 1.25rem;
+    }
+
+    .map-wrapper iframe {
+      display: block;
+      width: 100%;
+      height: 560px;
+      border: none;
+    }
+
+    .map-caption {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── DIVIDER ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 3rem 0;
+    }
+
+    /* ── ABOUT THE PROJECT ── */
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .body-text {
+      color: var(--ink-mid);
+      font-size: 1rem;
+      max-width: 680px;
+      line-height: 1.75;
+    }
+
+    .body-text p + p { margin-top: 1rem; }
+    .body-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 3rem;
+    }
+
+    .back-link::before { content: '←'; }
+    .back-link:hover { text-decoration: underline; }
+
+    @media (max-width: 680px) {
+      .map-wrapper iframe { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-nav"></div>
+
+  <div class="page-content">
+
+    <p class="page-eyebrow">Google · Maps · Product Design</p>
+    <h1>Google My Maps</h1>
+
+    <div class="page-intro">
+      <p>
+        My Maps lets anyone create, annotate, and share custom maps — layering
+        places, routes, and regions onto Google Maps with full control over
+        styling and visibility. I co-designed it from the ground up during my
+        eleven years at Google.
+      </p>
+      <p>
+        The map below is a live example: pharmacies in Zürich, built and
+        published using the same product. It illustrates the core My Maps
+        proposition — structured geographic data, authored by a non-specialist,
+        shared publicly with a single link.
+      </p>
+    </div>
+
+    <div class="map-wrapper">
+      <iframe
+        src="https://www.google.com/maps/d/edit?mid=1ddbdKNbJ2bDaqnJV8gnv7bkx3lWP4Wpi&usp=sharing"
+        title="Pharmacies in Zürich — a Google My Maps example"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <p class="map-caption">Pharmacies in Zürich · Created with Google My Maps</p>
+
+    <hr />
+
+    <h2>About the project</h2>
+    <div class="body-text">
+      <p>
+        Google My Maps launched in 2007 and was redesigned from the ground up in 2012-13. The central challenge was making geographic authoring accessible to people with no GIS background — allowing anyone to go from <strong>blank canvas to published, shareable map</strong> in a few
+        minutes, while preserving enough power for more structured use cases like field data collection and travel planning.<br /><br />
+        Partnering closely with a designer, my role was as a UXR was to evaluate and refine design concepts, starting with the layer model, and then key aspects such as styling, and data import of various geo formats.
+        To iterate rapidly, I adopted a "guerrilla" approach of internal participant recruitment and conducting studies in meeting rooms when no labs were available, with no loss to insight validity.
+     </p>
+    </div>
+
+    <a class="back-link" href="/portfolio/#work">Back to portfolio</a>
+
+  </div>
+
+  <script>
+    fetch('/portfolio/nav.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('site-nav').innerHTML = html);
+  </script>
+
+</body>
+</html>
