@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SBB-style Clock</title>
+  <style>
+    :root {
+      --clock-size: 320px; /* change this to resize the clock */
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      display:flex;
+      min-height:100vh;
+      align-items:center;
+      justify-content:center;
+      background:#f5f6f7;
+      margin:0;
+    }
+
+    .clock-wrap {
+      width:var(--clock-size);
+      height:var(--clock-size);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: white;
+      border-radius:50%;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      padding: 16px;
+    }
+
+    /* keep the SVG responsive inside the circular frame */
+    svg {
+      width:100%;
+      height:100%;
+      display:block;
+    }
+
+    /* style handles */
+    .hand-hour { stroke:#000; stroke-width:6; stroke-linecap:round; }
+    .hand-minute { stroke:#000; stroke-width:4; stroke-linecap:round; }
+    .hand-second { stroke:#e30613; stroke-width:2; stroke-linecap:round; }
+    .second-dot { fill:#e30613; stroke:none; }
+
+    /* hour markers */
+    .tick { stroke:#000; stroke-width:3; stroke-linecap:round; }
+    .minor-tick { stroke:#000; stroke-width:1.5; opacity:0.5; }
+
+    /* center cap */
+    .cap { fill:#000; }
+
+    .caption {
+      margin-top:12px;
+      text-align:center;
+      font-size:13px;
+      color:#333;
+    }
+
+    /* accessibility: hide the time text visually but keep for screen readers */
+    .sr-only {
+      position:absolute;
+      width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="clock-wrap" role="img" aria-label="Analog clock showing the current time">
+      <!-- SVG clock face (viewBox 0 0 200 200) -->
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.6" result="b"/>
+            <feBlend in="SourceGraphic" in2="b"/>
+          </filter>
+        </defs>
+
+        <!-- face background -->
+        <circle cx="100" cy="100" r="92" fill="#fff" stroke="#c9c9c9" stroke-width="0.6"/>
+
+        <!-- hour ticks -->
+        <g id="ticks" transform="translate(100,100)">
+          <!-- 12 major ticks -->
+          <!-- major ticks (long) -->
+          <g id="major">
+            <!-- generate with JS? we'll place them statically via code - but here draw in HTML for clarity -->
+          </g>
+          <!-- minor ticks (short) -->
+        </g>
+
+        <!-- hands group centered at 100,100 -->
+        <g id="hands" transform="translate(100,100)">
+          <!-- hour hand -->
+          <line id="hour" class="hand-hour" x1="0" y1="6" x2="0" y2="-46" transform="rotate(0)"/>
+          <!-- minute hand -->
+          <line id="minute" class="hand-minute" x1="0" y1="8" x2="0" y2="-68" transform="rotate(0)"/>
+          <!-- second hand -->
+          <line id="second" class="hand-second" x1="0" y1="22" x2="0" y2="-78" transform="rotate(0)"/>
+          <!-- red dot on second -->
+          <circle id="secondDot" class="second-dot" cx="0" cy="-88" r="6"/>
+          <!-- center cap -->
+          <circle cx="0" cy="0" r="4" class="cap"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="caption">SBB-style analog clock (stop-2-go)</div>
+    <div id="timeForScreenReader" class="sr-only" aria-live="polite"></div>
+  </div>
+
+  <script>
+    // Draw ticks programmatically (so the SVG above stays compact)
+    (function drawTicks() {
+      const svg = document.querySelector('svg');
+      const ticksGroup = document.createElementNS('http://www.w3.org/2000/svg','g');
+      ticksGroup.setAttribute('transform','translate(100,100)');
+      for (let i=0;i<60;i++){
+        const isMajor = (i % 5 === 0);
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        const angle = i * 6 * Math.PI / 180;
+        const inner = isMajor ? 70 : 78;
+        const outer = 86;
+        const x1 = inner * Math.sin(angle);
+        const y1 = -inner * Math.cos(angle);
+        const x2 = outer * Math.sin(angle);
+        const y2 = -outer * Math.cos(angle);
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('class', isMajor ? 'tick' : 'minor-tick');
+        ticksGroup.appendChild(line);
+      }
+      // place behind hands
+      svg.insertBefore(ticksGroup, document.getElementById('hands'));
+    })();
+
+    // STOP-2-GO behaviour:
+    // - second hand sweeps continuously for ~58.5s,
+    // - then it holds at 12 (0 deg) until the minute increments (pause ~1.5s).
+    // This code approximates that: secondsFloat < 58.5 -> sweep, else hold at 0.
+    // Minute hand jumps when seconds enter the pause zone.
+
+    const hourEl = document.getElementById('hour');
+    const minuteEl = document.getElementById('minute');
+    const secondEl = document.getElementById('second');
+    const secondDot = document.getElementById('secondDot');
+    const timeSR = document.getElementById('timeForScreenReader');
+
+    function update() {
+      const now = new Date();
+      const hours = now.getHours() % 12;
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ms = now.getMilliseconds();
+      const secondsFloat = seconds + ms/1000;
+
+      // stop2go threshold (secondsFloat at which the second hand should stop)
+      const stopThreshold = 58.5; // seconds
+
+      // Second hand angle:
+      let secondAngle;
+      if (secondsFloat < stopThreshold) {
+        // sweep proportionally within 0..stopThreshold
+        // map [0, stopThreshold) -> [0, 360)
+        secondAngle = (secondsFloat / 60) * 360;
+      } else {
+        // hold at top (0deg)
+        secondAngle = 0;
+      }
+
+      // Minute hand: normally minute + seconds/60, but during the stop2go pause the minute has already jumped:
+      let minuteForAngle;
+      if (secondsFloat < stopThreshold) {
+        minuteForAngle = minutes + secondsFloat / 60;
+      } else {
+        // during pause: display next minute to mimic the jump
+        minuteForAngle = (minutes + 1);
+      }
+
+      // Hour hand: hours + minute/60
+      const hourForAngle = hours + (minuteForAngle % 60) / 60;
+
+      const hourAngle = (hourForAngle / 12) * 360;
+      const minuteAngle = (minuteForAngle / 60) * 360;
+
+      // Apply transforms
+      hourEl.setAttribute('transform', `rotate(${hourAngle})`);
+      minuteEl.setAttribute('transform', `rotate(${minuteAngle})`);
+      secondEl.setAttribute('transform', `rotate(${secondAngle})`);
+      secondDot.setAttribute('transform', `translate(0,0) rotate(${secondAngle})`);
+
+      // Update screen reader live text (friendly time)
+      timeSR.textContent = now.toLocaleTimeString();
+
+      // request next frame
+      requestAnimationFrame(update);
+    }
+
+    // Kick off animation loop
+    requestAnimationFrame(update);
+
+    // Make the clock scale with --clock-size: you can change the CSS variable in :root.
+  </script>
+</body>
+</html>

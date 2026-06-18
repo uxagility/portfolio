@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>SBB Live Departures</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+	  color: #FFFFFF;
+      margin: 30px;
+	  background-color:#2d327d;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+  	  color:black;
+      background-color: #f2f2f2;
+    }
+	.header {
+	  display: flex;
+	  align-items: center;   /* vertical alignment */
+	  gap: 20px;             /* space between clock and title */
+	}
+	.delay {
+      font-weight: bold;
+    }
+    .delay-ok {
+      color: green;
+    }
+    .delay-bad {
+      color: red;
+    }
+    #status {
+      margin-top: 10px;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body onload="loadDepartures()">
+	<div class="header">
+	  <canvas id="sbb-clock" width="100" height="100"></canvas>
+	  <h1>SBB Live Departures</h1>
+	</div>
+
+	<script src="sbbclock.js"></script>
+	<script>
+	  const clock = new SBBClock("sbb-clock");
+	  clock.start();
+	</script>  
+
+  <label for="station">Choose a departure station:</label>
+    <select name="station" id="station">
+      <option value="wallisellen">Wallisellen</option>
+      <option value="winterthur">Winterthur</option>
+    </select>
+  <br /><br />
+
+  <div id="status"></div>
+
+  <table id="results" style="display:none;">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Train</th>
+        <th>Destination</th>
+		<th>Via</th>
+        <th>Platform</th>
+		<th>Delay</th>
+      </tr>
+    </thead>
+    <tbody id="results-body"></tbody>
+  </table>
+
+<script>
+  let autoRefreshTimer = setInterval(loadDepartures, 60000);
+
+  document.getElementById("station").addEventListener("change", () => {
+    clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(loadDepartures, 60000);
+    loadDepartures();
+  });
+
+  async function loadDepartures() {
+    clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(loadDepartures, 60000);
+
+    const station = document.getElementById("station").value.trim();
+    if (!station) {
+      document.getElementById("status").textContent = "Please enter a station.";
+      return;
+    }
+
+  // stationboard endpoint shows live departures from a station
+  const url = `https://transport.opendata.ch/v1/stationboard?station=${encodeURIComponent(station)}&limit=25`;
+
+  document.getElementById("status").textContent = "Loading…";
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+
+    const table = document.getElementById("results");
+    const tbody = document.getElementById("results-body");
+
+    tbody.innerHTML = "";
+
+    if (!data.stationboard || data.stationboard.length === 0) {
+      document.getElementById("status").textContent = "No departures found.";
+      table.style.display = "none";
+      return;
+    }
+
+    for (const dep of data.stationboard) {
+
+      // Some feeds put the stop info in dep.stop, some in dep.stop with departure field.
+      const stop = dep.stop || {};
+      const departureIso = stop.departure ?? stop.prognosis?.departure ?? null;
+	  
+      const platform = stop.platform ?? stop.prognosis?.platform ?? "";
+
+      // delay may be top-level (dep.stop.delay) or in prognosis
+      const delay = stop.delay ?? stop.prognosis?.delay ?? null;
+
+      // Train id / label
+      const trainLabel = (dep.category || "") + (dep.number ? " " + dep.number : "");
+
+	  // "via" text from passList
+      let viaText = "";
+      if ((dep.passList?.length ?? 0) > 2) {
+        const middleStops = dep.passList.slice(1, -1);
+        viaText = middleStops.map(s => escapeHtml(s.station.name)).join(", ");
+      }
+      
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${formatTime(departureIso)}</td>
+        <td>${escapeHtml(trainLabel)}</td>
+        <td>${escapeHtml(dep.to || "")}</td>
+        <td>${viaText}</td>
+	  	  <td>${escapeHtml(platform)}</td>
+        <td class="delay ${delay === null ? "" : delay > 0 ? "delay-bad" : "delay-ok"}">
+          ${delay === null ? "—" : delay === 0 ? "On time" : "+" + delay + " min"}
+        </td>
+      `;
+
+      tbody.appendChild(row);
+    }
+
+    table.style.display = "";
+    document.getElementById("status").textContent = "Last updated: " + new Date().toLocaleTimeString() + " (auto-refreshes every 60 seconds)";
+
+  } catch (err) {
+	  document.getElementById("status").textContent = "Error: " + err;
+  }
+}
+
+function formatTime(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  // show local HH:MM
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function escapeHtml(s) {
+  if (!s) return "";
+  return s.replace(/[&<>"']/g, function (m) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
+</script>
+
+</body>
+</html>
