@@ -1,0 +1,85 @@
+<!--
+  ============================================================
+  CHILD PAGE NAV SNIPPET — Stephen Wheeler portfolio
+  ============================================================
+  Paste this into the <head> of every child page (Wordle,
+  case studies, etc.), then add the <nav> block immediately
+  after the opening <body> tag.
+
+  The nav CSS is self-contained below — no external stylesheet
+  needed. It matches index.html exactly.
+  ============================================================
+-->
+
+<!-- 1. Paste into <head> ─────────────────────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  /* Portfolio nav — shared across all pages */
+  :root {
+    --bg:        #F7F6F2;
+    --ink:       #1A1A1A;
+    --ink-mid:   #555550;
+    --accent:    #2D7D6F;
+    --rule:      #DDDDD8;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  .sw-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    font-family: var(--sans);
+  }
+
+  .sw-nav-logo {
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .sw-nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sw-nav-links a {
+    color: var(--ink-mid);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+
+  .sw-nav-links a:hover { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    .sw-nav-links { gap: 1.2rem; }
+  }
+</style>
+
+
+<!-- 2. Paste immediately after <body> ────────────────────── -->
+<nav class="sw-nav">
+  <a class="sw-nav-logo" href="/portfolio/">Stephen Wheeler</a>
+  <ul class="sw-nav-links">
+    <li><a href="/portfolio/#work">Work</a></li>
+    <li><a href="/portfolio/#about">About</a></li>
+    <li><a href="/portfolio/#contact">Contact</a></li>
+  </ul>
+</nav>
